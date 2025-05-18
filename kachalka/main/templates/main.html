@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Said's Gym</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #121212, #181818);
+            color: white;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            flex: 1;
+        }
+        .container h1{
+            text-align: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo img {
+            width: 100px;
+            height: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 50px;
+            font-weight: 800;
+            color: #ff4b5c;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+
+
+        .auth:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .section1 {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+        }
+
+        .section2 {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .section1 h2 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .section1 h4{
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-style: outset;
+            border-radius: 10px;
+        }
+        .content-box {
+            text-align: center;
+            padding: 20px;
+            margin: 10px;
+            width: 80%;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .workout-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .workout {
+            width: 130px;
+            height: 170px;
+            display: block;
+            text-decoration: none;
+         
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .workout img {
+            width: 100%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        .workout:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-15px);
+        }
+
+        .footer {
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .footer a {
+            margin: 0 15px;
+            color: #ff4b5c;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .footer a:hover {
+            color: #ff758f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <h1>Said's Gym</h1>
+                <img src="{% static 'main/images/dumpbell.png' %}" alt="Гантеля">
+            </div>
+                <div class="auth">
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" style="background: rgba(255, 255, 255, 0.1); color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s;">
+                                Logout
+                            </button>
+                        </form>
+                    {% else %}
+                        <button onclick="window.location.href='{% url 'registration' %}'" style="background: rgba(255, 255, 255, 0.1);  solid white; color: white; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s;">
+                            Login | Register
+                        </button>
+                    {% endif %}
+                </div>
+
+
+        </div>
+
+        <div class="section1">
+            <h1>На этом сайте вы найдете:</h1>
+            <div class="content-box">
+                <h2><strong>Планы тренировок</strong> для всех групп мышц – от новичка до профи</h2>
+                <h2><strong>GIF</strong> с техникой выполнения упражнений</h2>
+                <h2><strong>Каталог упражнений</strong> с подробным описанием и рекомендациями</h2>
+                <h2><strong>Готовые программы</strong> для набора массы, сжигания жира и повышения выносливости</h2>
+            </div>
+
+        </div>
+
+        <div class="section2">
+            <h2>Виды тренировок</h2>
+            <div class="workout-container">
+                <a href="https://example.com/legs" class="workout">
+                    <img src="{% static 'main/images/legs1.png' %}" alt="Ноги">
+                    <h4 style="color: white">Ноги</h4>
+                </a>
+                <a href="https://example.com/back" class="workout">
+                    <img src="{% static 'main/images/spine1.png' %}" alt="Спина">
+                    <h4 style="color: white">Спина</h4>
+                </a>
+                <a href="https://example.com/arms" class="workout">
+                    <img src="{% static 'main/images/biceps1.png' %}" alt="Руки">
+                    <h4 style="color: white">Руки</h4>
+                </a>
+            </div>
+        </div>
+
+        <a style="margin-top: 15px; font-size: 14px; color: #ffffff" href="{% url 'trains' %}">Посмотреть все виды тренировок</a>
+
+        <div class="footer">
+            <a href="{% url 'about' %}">About us</a>
+            <a href="trains.html">Buy train plan</a>
+        </div>
+    </div>
+</body>
+</html>

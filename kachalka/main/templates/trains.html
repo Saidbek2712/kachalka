@@ -75,6 +75,23 @@
         .filter-links a:hover {
             text-decoration: underline;
         }
+        .filter-buttons a {
+            color: red;
+            margin: 0 10px;
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .filter-buttons a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background-color: red;
+        }
         .training-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -239,7 +256,13 @@
             {% endfor %}
         </div>
     </section>
-
+    <div class="filter-buttons">
+        <a href="{% url 'trains' %}" class="{% if not request.GET.group %}active{% endif %}">Все</a>
+        <a href="{% url 'trains' %}?group=4" class="{% if request.GET.group == '4' %}active{% endif %}">Спина</a>
+        <a href="{% url 'trains' %}?group=3" class="{% if request.GET.group == '3' %}active{% endif %}">Руки</a>
+        <a href="{% url 'trains' %}?group=1" class="{% if request.GET.group == '1' %}active{% endif %}">Ноги</a>
+        <a href="{% url 'trains' %}?group=2" class="{% if request.GET.group == '2' %}active{% endif %}">Грудь</a>
+    </div>
 
     <div id="overlay" onclick="closeModal()"></div>
     <div id="modal">

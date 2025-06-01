@@ -24,7 +24,7 @@ def exercise_list(request):
     else:
         exercises = Exercise.objects.all()
 
-    return render(request, 'trains.html', {'exercises': exercises, 'groups': groups})
+    return render(request, 'trains.html', {'exercises': exercises, 'groups': groups, 'request': request})
 
 def registration(request):
     errors = {}
@@ -33,7 +33,6 @@ def registration(request):
 
         email = request.POST.get('email')
 
-        # Проверка на имеил
         if not email:
             errors['email'] = 'Введите email.'
         elif User.objects.filter(email=email).exists():

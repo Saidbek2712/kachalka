@@ -8,14 +8,11 @@ from .models import Exercise, MuscleGroup
 def main(request):
     return render(request, 'main.html')
 
-
 def about(request):
     return render(request, 'about.html')
 
-
 def login_view(request):
     return render(request, 'registration/login.html')
-
 
 def exercise_list(request):
 
@@ -28,7 +25,6 @@ def exercise_list(request):
         exercises = Exercise.objects.all()
 
     return render(request, 'trains.html', {'exercises': exercises, 'groups': groups})
-
 
 def registration(request):
     errors = {}

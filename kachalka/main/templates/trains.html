@@ -2,8 +2,8 @@
 {% load static %}
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Виды тренировок</title>
     <style>
         body {
@@ -96,12 +96,10 @@
             align-items: center;
             color: #fff;
         }
-
         .card:hover {
             transform: scale(1.05);
             box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.6);
         }
-
         .gif-container {
             flex: 0 0 auto;
             width: 100%;
@@ -109,7 +107,6 @@
             overflow: hidden;
             border-radius: 8px;
         }
-
         .exercise-gif {
             width: 100%;
             height: auto;
@@ -117,32 +114,99 @@
             object-fit: cover;
             display: block;
         }
-
         .exercise-title {
             flex: 0 0 auto;
             text-align: center;
             margin-top: 10px;
+            width: 100%; /* на всякий случай */
         }
-
         .exercise-title strong {
-            color: #fff;
+            display: block;
+            width: 100%;
+            text-align: center;
             font-size: 1.2em;
             font-weight: bold;
+            color: #fff;
         }
+
+
+        /* Модальное окно */
+        #overlay {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: none;
+            z-index: 1000;
+        }
+        #modal {
+            position: fixed;
+            bottom: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 900px;
+            background: #1b1d2b;
+            border-radius: 10px 10px 0 0;
+            padding: 20px 30px;
+            color: white;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+            transition: bottom 0.5s ease;
+            z-index: 1001;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        #modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #modal-title {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+        }
+        #modal-close {
+            cursor: pointer;
+            font-size: 30px;
+            font-weight: bold;
+            color: #ff4d4d;
+            border: none;
+            background: transparent;
+        }
+        #modal-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        #modal-description {
+            margin-top: 20px;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+        #modal-rating {
+            margin-top: 15px;
+            font-size: 24px;
+            color: #ffcc00;
+        }
+
     </style>
 </head>
 <body>
     <a href="{% url 'main' %}" class="back-button">←</a>
     <header>
         <div class="logo-container">
-            <img src="{% static 'main/images/dumpbell.png' %}" alt="icon" >
+            <img src="{% static 'main/images/dumpbell.png' %}" alt="icon" />
             <h1 class="logo">Said's Gym</h1>
         </div>
     </header>
 
     <section class="training-section">
         <h2>ВИДЫ ТРЕНИРОВОК</h2>
-
 
         <div class="filter-links">
             <a href="{% url 'trains' %}">Все</a>
@@ -151,13 +215,17 @@
             {% endfor %}
         </div>
 
-        <!-- Карточки упражнений -->
+
         <div class="training-grid">
             {% for exercise in exercises %}
-            <div class="card">
+            <div class="card"
+                data-title="{{ exercise.title }}"
+                data-description="{{ exercise.description|escapejs }}"
+                data-image="{% if exercise.image %}{{ exercise.image.url }}{% endif %}"
+                onclick="openModalFromCard(this)">
                 <div class="gif-container">
                     {% if exercise.image %}
-                        <img src="{{ exercise.image.url }}" alt="{{ exercise.title }} GIF" class="exercise-gif">
+                        <img src="{{ exercise.image.url }}" alt="{{ exercise.title }} GIF" class="exercise-gif" />
                     {% else %}
                         <p>GIF отсутствует.</p>
                     {% endif %}
@@ -171,5 +239,50 @@
             {% endfor %}
         </div>
     </section>
+
+
+    <div id="overlay" onclick="closeModal()"></div>
+    <div id="modal">
+        <div id="modal-header">
+            <div id="modal-title">Название</div>
+            <button id="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <img id="modal-image" src="" alt="Гиф упражнения" />
+        <div id="modal-description">Описание упражнения</div>
+        <div id="modal-rating">⭐⭐⭐⭐⭐</div>
+    </div>
+
+    <script>
+        function openModalFromCard(card) {
+            const title = card.dataset.title;
+            const description = card.dataset.description;
+            const imageUrl = card.dataset.image;
+            const rating = parseInt(card.dataset.rating) || 0;
+
+            document.getElementById("modal-title").textContent = title;
+            document.getElementById("modal-description").textContent = description;
+
+            const modalImage = document.getElementById("modal-image");
+            if (imageUrl) {
+                modalImage.src = imageUrl;
+                modalImage.style.display = "block";
+            } else {
+                modalImage.style.display = "none";
+            }
+
+            const stars = "⭐".repeat(rating) + "☆".repeat(5 - rating);
+            document.getElementById("modal-rating").textContent = stars;
+
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("modal").style.bottom = "5%";
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.bottom = "-100%";
+            setTimeout(() => {
+                document.getElementById("overlay").style.display = "none";
+            }, 500);
+        }
+    </script>
 </body>
 </html>
